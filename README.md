@@ -79,4 +79,4 @@ This lab reinforced the importance of strong Windows event log analysis skills f
 
 🛡️ Vihanga | Blue Team Journey
 
-Connect with me: [LinkedIn](https://www.linkedin.com/in/yourprofile)
+Connect with me: [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/vihanga-senanayake-b7898126a/)
