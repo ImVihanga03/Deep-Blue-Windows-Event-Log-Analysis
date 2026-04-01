@@ -10,9 +10,11 @@ Windows Event Log Analysis using DeepBlueCLI to investigate RDP brute-force atta
 ---
 
 ### Executive Summary
-I conducted a hands-on investigation of Windows Security and System event logs to uncover a simulated attack involving RDP brute-force attempts, malicious process execution, Meterpreter activity, and persistence mechanisms. 
+I performed a detailed hands-on investigation into Windows Security and System event logs to analyze a simulated attack chain involving RDP brute-force attempts, malicious process execution, Meterpreter reverse shell activity, and persistence mechanisms.
 
-Using **DeepBlueCLI** for rapid automated detection and **Event Viewer** for detailed manual analysis, I successfully traced attacker behavior from initial compromise to persistence. This lab allowed me to practice real-world log analysis and threat hunting techniques commonly used in SOC environments.
+By leveraging **DeepBlueCLI** for automated detection of suspicious command lines and **Event Viewer** for manual deep-dive analysis of Event ID 4688 (Process Creation), I successfully traced the attacker’s actions from initial compromise to establishing persistence. 
+
+This lab significantly strengthened my practical skills in Windows event log analysis and threat hunting — core competencies required for SOC Analyst and Blue Team roles.
 
 ### Tools Used
 - DeepBlueCLI  
