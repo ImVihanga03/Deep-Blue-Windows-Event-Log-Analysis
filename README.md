@@ -27,31 +27,31 @@ I analyzed the Security.evtx log using DeepBlueCLI. The tool flagged a long enco
 ![DeepBlueCLI Output - GoogleUpdate.exe Activity](q1-googleupdate-event.png)  
 *DeepBlueCLI showing the suspicious encoded command line related to GoogleUpdate.exe.*
 
-**Timestamp of Likely Meterpreter Activity** 
+**Timestamp of Likely Meterpreter Activity**  
 DeepBlueCLI highlighted suspicious activity involving `cmd.exe` with a named pipe at **10:48:14 AM** on 10th April 2021 — a common sign of Meterpreter usage.
 
 ![Meterpreter Activity Timestamp](q2-meterpreter-time.png)  
 *DeepBlueCLI output clearly marking the timestamp of suspicious Meterpreter-style activity.*
 
-**Suspicious Service Created** 
+**Suspicious Service Created**  
 DeepBlueCLI detected multiple suspicious PSAttack-style commands and activity related to a named pipe (`rztbzn`), which is frequently used by Meterpreter.
 
 ![DeepBlueCLI Suspicious Commands](q3-suspicious-service.png)  
 *DeepBlueCLI results showing suspicious command lines and Meterpreter pipe activity.*
 
-**Malicious Executable Used for Meterpreter Reverse Shell** 
+**Malicious Executable Used for Meterpreter Reverse Shell**  
 Through Event ID 4688 (Process Creation), I identified `ServiceUpdate.exe` as the malicious executable used to establish the Meterpreter reverse shell.
 
 ![ServiceUpdate.exe Process Creation](q4-serviceupdate-exe.png)  
 *Event Viewer showing the creation of the malicious executable ServiceUpdate.exe.*
 
-**Command Line Used for Persistence Account Creation**
+**Command Line Used for Persistence Account Creation**  
 Event ID 4688 captured the command `net user ServiceAct /add`, which was used to create a new persistence account.
 
 ![Account Creation Command](q5-account-creation.png)  
 *Event Viewer displaying the net user command used to create the persistence account "ServiceAct".*
 
-**Local Groups the Persistence Account Was Added To**
+**Local Groups the Persistence Account Was Added To**  
 The newly created account "ServiceAct" was added to two privileged groups:
 
 ![Group Addition - Administrators](q6-group-additions-1.png)  
