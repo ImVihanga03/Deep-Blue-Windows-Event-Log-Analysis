@@ -1,79 +1,67 @@
 # Deep-Blue-Windows-Event-Log-Analysis
 Windows Event Log Analysis using DeepBlueCLI to investigate RDP brute-force attack and suspicious activity from Security.evtx and System.evtx
+---
 # Windows Event Log Analysis – Deep Blue Lab
 
 **Lab**: Blue Team Labs Online – Deep Blue  
-**Analysis Type**: Windows Event Log Investigation & Threat Hunting
+**Date Completed**: April 1, 2026  
+**Focus**: Threat Hunting & Incident Response using Windows Event Logs
 
 ---
 
 ### Executive Summary
-Performed a structured investigation of Windows Security and System event logs to identify suspicious activity from a simulated attack. The analysis focused on detecting brute-force attempts, malicious process execution, Meterpreter activity, and persistence mechanisms using Event Viewer and DeepBlueCLI.
+I performed a structured investigation of Windows Security.evtx and System.evtx logs to detect RDP brute-force attempts, malicious process execution, Meterpreter activity, and persistence mechanisms. I used a combination of **DeepBlueCLI** for automated detection and **Event Viewer** for manual deep dive.
 
 ### Tools Used
-- Windows Event Viewer
 - DeepBlueCLI
-- Security.evtx and System.evtx log files
+- Windows Event Viewer
+- Security.evtx & System.evtx logs
 
 ### Investigation Process & Findings
 
 **Question 1: Which user account ran GoogleUpdate.exe?**  
-I analyzed the Security.evtx log using **DeepBlueCLI** by running the following command:
+Analyzed the Security log with DeepBlueCLI (`.\DeepBlue.ps1 ..\Security.evtx`). The tool flagged a long encoded command line involving `GoogleUpdate.exe`, which executed under the **NT AUTHORITY\SYSTEM** account.
 
- on powershell:
-```.\DeepBlue.ps1 ..\Security.evtx```
-
-![GoogleUpdate.exe Process Creation Event](q1-googleupdate-event.png) 
-DeepBlueCLI output showing a long encoded command line involving GoogleUpdate.exe. This indicates suspicious activity where GoogleUpdate.exe was used (likely for execution or download).
-
+![DeepBlueCLI Output - GoogleUpdate.exe Activity](q1-googleupdate-event.png)  
+*DeepBlueCLI showing a long obfuscated command line related to GoogleUpdate.exe execution.*
 
 **Question 2: At what time is there likely evidence of Meterpreter activity?**  
-Identified suspicious Meterpreter-related activity at **10:48:14 AM** on 10th April 2021 through process creation events.
+DeepBlueCLI identified suspicious Meterpreter-style activity (cmd.exe with named pipe) at **10:48:14 AM** on 10th April 2021.
 
-![Meterpreter Activity Timestamp](q2-meterpreter-time.png)
-DeepBlueCLI analysis results highlighting the exact timestamp 10:48:14 AM on 10th April 2021, where suspicious Meterpreter-style activity (cmd.exe with named pipe) was detected in the Security log.
-
+![Meterpreter Activity Timestamp](q2-meterpreter-time.png)  
+*DeepBlueCLI output highlighting the exact timestamp of suspicious Meterpreter-related command execution.*
 
 **Question 3: What is the name of the suspicious service created?**  
-Using DeepBlueCLI on the System.evtx log, detected the suspicious service named **`UpdateOrchestrator`**.
+DeepBlueCLI detected suspicious PSAttack-style commands and activity related to a named pipe (`rztbzn`) often used by Meterpreter.
 
-![Suspicious Service Creation](q3-suspicious-service.png)
-DeepBlueCLI output showing suspicious command-line activity from the Security.evtx log. It highlights multiple PSAttack-style commands, including the creation of a named pipe (rztbzn) commonly associated with Meterpreter.
+![DeepBlueCLI Suspicious Commands](q3-suspicious-service.png)  
+*DeepBlueCLI results displaying multiple suspicious command lines and Meterpreter pipe activity.*
 
+**Question 4: Identify the malicious executable downloaded for Meterpreter reverse shell**  
+Event ID 4688 showed the process creation of the malicious executable `ServiceUpdate.exe` by user "Mike Smith".
 
-**Question 4: Identify the malicious executable downloaded for Meterpreter reverse shell (between 10:30–10:50 AM on 10th April 2021).**  
-The malicious executable identified was **`ServiceUpdate.exe`**.
+![ServiceUpdate.exe Process Creation](q4-serviceupdate-exe.png)  
+*Event Viewer showing the creation of ServiceUpdate.exe – the payload used for the Meterpreter reverse shell.*
 
-![Malicious Executable - ServiceUpdate.exe](q4-serviceupdate-exe.png)
-Event Viewer (Event ID 4688) showing the process creation of the malicious executable ServiceUpdate.exe downloaded by user "Mike Smith". This was the payload used for the Meterpreter reverse shell.
+**Question 5: Command line for persistence account creation?**  
+Captured the command `net user ServiceAct /add` via Event ID 4688.
 
+![Account Creation Command](q5-account-creation.png)  
+*Event Viewer (Event ID 4688) capturing the net user command used to create the persistence account "ServiceAct".*
 
-**Question 5: What was the command line used to create the persistence account (between 11:25–11:40 AM)?**  
-The command line used was:  
-`net user ServiceAct /add`
+**Question 6: Which two local groups was the account added to?**  
+The account "ServiceAct" was added to **Administrators** and **Remote Desktop Users** groups.
 
-![Persistence Account Creation Command](q5-account-creation.png)
-Event Viewer showing Event ID 4688 with the command net user ServiceAct /add, which was used to create the persistence user account "ServiceAct".
+![Group Addition - Administrators](q6-group-additions-1.png)  
+*Event Viewer showing the command adding "ServiceAct" to the Administrators group.*
 
-
-**Question 6: What two local groups was this new account added to?**  
-The newly created account was added to:
-- **Administrators**
-- **Remote Desktop Users**
-
-![Local Group Additions](q6-group-additions-1.png)
-Event Viewer displaying another Event ID 4688 where the command net localgroup administrators ServiceAct /add was executed, adding the newly created account to the Administrators group.
-
-![Local Group Additions](q6-group-additions-2.png)
-Event Viewer showing Event ID 4688 (Process Creation). This event captures the command net localgroup "Remote Desktop Users" ServiceAct /add, adding the persistence account to the Remote Desktop Users group.
+![Group Addition - Remote Desktop Users](q6-group-additions-2.png)  
+*Event Viewer showing the command adding "ServiceAct" to the Remote Desktop Users group.*
 
 ### Key Takeaways
-- Event ID 4688 (Process Creation) is highly effective for detecting suspicious executables and attacker tools.
-- Brute-force attacks are clearly visible through repeated Event ID 4625 (failed logon) entries.
-- Attackers commonly use SYSTEM privileges and create persistence accounts with elevated rights.
-- Combining manual filtering in Event Viewer with tools like DeepBlueCLI significantly improves investigation speed and accuracy.
-
-This lab reinforced the importance of strong Windows event log analysis skills for effective SOC operations and incident response.
+- Event ID 4688 is extremely valuable for detecting attacker tools and persistence mechanisms.
+- DeepBlueCLI combined with Event Viewer provides fast and accurate Windows log analysis.
+- This lab strengthened my ability to investigate real-world Windows-based attacks — a critical skill for SOC Analyst and Blue Team roles.
 
 ---
 
