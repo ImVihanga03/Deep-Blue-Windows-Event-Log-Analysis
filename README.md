@@ -21,38 +21,38 @@ Performed a structured investigation of Windows Security and System event logs t
 Filtered the Security log for Event ID 4688 (Process Creation) and searched for "GoogleUpdate.exe".  
 The process was executed under the **NT AUTHORITY\SYSTEM** account.
 
-![Process Creation Events (Event ID 4688)](screenshots/3-event-viewer-security.png)  
-![GoogleUpdate.exe Process Creation Event](screenshots/q1-googleupdate-event.png)  
-![Subject Field Showing NT AUTHORITY\SYSTEM](screenshots/q1-subject-user.png)
+![Process Creation Events (Event ID 4688)](event-viewer-security.png)  
+![GoogleUpdate.exe Process Creation Event](q1-googleupdate-event.png)  
+![Subject Field Showing NT AUTHORITY\SYSTEM](q1-subject-user.png)
 
 **Question 2: At what time is there likely evidence of Meterpreter activity?**  
 Identified suspicious Meterpreter-related activity at **10:48:14 AM** on 10th April 2021 through process creation events.
 
-![Meterpreter Activity Timestamp](screenshots/q2-meterpreter-time.png)
+![Meterpreter Activity Timestamp](q2-meterpreter-time.png)
 
 **Question 3: What is the name of the suspicious service created?**  
 Using DeepBlueCLI on the System.evtx log, detected the suspicious service named **`UpdateOrchestrator`**.
 
-![Suspicious Service Creation](screenshots/q3-suspicious-service.png)
+![Suspicious Service Creation](q3-suspicious-service.png)
 
 **Question 4: Identify the malicious executable downloaded for Meterpreter reverse shell (between 10:30–10:50 AM on 10th April 2021).**  
 The malicious executable identified was **`ServiceUpdate.exe`**.
 
-![Malicious Executable - ServiceUpdate.exe](screenshots/q4-serviceupdate-exe.png)
+![Malicious Executable - ServiceUpdate.exe](q4-serviceupdate-exe.png)
 
 **Question 5: What was the command line used to create the persistence account (between 11:25–11:40 AM)?**  
 The command line used was:  
 `net user ServiceAct /add`
 
-![Persistence Account Creation Command](screenshots/q5-account-creation.png)
+![Persistence Account Creation Command](q5-account-creation.png)
 
 **Question 6: What two local groups was this new account added to?**  
 The newly created account was added to:
 - **Administrators**
 - **Remote Desktop Users**
 
-![Local Group Additions](screenshots/q6-group-additions-1.png)
-![Local Group Additions](screenshots/q6-group-additions-2.png)
+![Local Group Additions](q6-group-additions-1.png)
+![Local Group Additions](q6-group-additions-2.png)
 
 ### Key Takeaways
 - Event ID 4688 (Process Creation) is highly effective for detecting suspicious executables and attacker tools.
