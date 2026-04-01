@@ -10,7 +10,9 @@ Windows Event Log Analysis using DeepBlueCLI to investigate RDP brute-force atta
 ---
 
 ### Executive Summary
-I conducted a detailed investigation of Windows Security and System event logs to uncover signs of an RDP brute-force attack, malicious process execution, Meterpreter activity, and persistence techniques. I used **DeepBlueCLI** for automated analysis and **Event Viewer** for manual verification.
+I conducted a hands-on investigation of Windows Security and System event logs to uncover a simulated attack involving RDP brute-force attempts, malicious process execution, Meterpreter activity, and persistence mechanisms. 
+
+Using **DeepBlueCLI** for rapid automated detection and **Event Viewer** for detailed manual analysis, I successfully traced attacker behavior from initial compromise to persistence. This lab allowed me to practice real-world log analysis and threat hunting techniques commonly used in SOC environments.
 
 ### Tools Used
 - DeepBlueCLI  
@@ -59,10 +61,10 @@ The newly created account "ServiceAct" was added to two privileged groups:
 *Event Viewer showing the account being added to the Remote Desktop Users group.*
 
 ### Key Takeaways
-- Event ID 4688 (Process Creation) is one of the most important events for detecting attacker tools and persistence.
-- DeepBlueCLI is very effective for quickly finding suspicious activity in large logs.
-- Combining automated tools with manual Event Viewer analysis gives strong visibility during investigations.
-- This lab greatly improved my practical threat hunting and log analysis skills — essential for any SOC or Blue Team role.
+- Mastering Event ID 4688 (Process Creation) is essential for detecting attacker tools, malicious executables, and persistence attempts in Windows environments.
+- DeepBlueCLI significantly speeds up log analysis by automatically highlighting suspicious command lines and known attack patterns.
+- Combining automated tools like DeepBlueCLI with manual verification in Event Viewer provides a powerful and efficient investigation workflow.
+- This lab enhanced my ability to investigate real-world Windows-based attacks, including brute-force attempts, Meterpreter usage, and persistence techniques — skills directly applicable to SOC operations and incident response roles.
 
 ---
 
