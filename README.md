@@ -27,12 +27,14 @@ I analyzed the Security.evtx log using **DeepBlueCLI** by running the following 
 
 DeepBlueCLI output showing a long encoded command line involving GoogleUpdate.exe. This indicates suspicious activity where GoogleUpdate.exe was used (likely for execution or download).
 
+
 **Question 2: At what time is there likely evidence of Meterpreter activity?**  
 Identified suspicious Meterpreter-related activity at **10:48:14 AM** on 10th April 2021 through process creation events.
 
 ![Meterpreter Activity Timestamp](q2-meterpreter-time.png)
 
 DeepBlueCLI analysis results highlighting the exact timestamp 10:48:14 AM on 10th April 2021, where suspicious Meterpreter-style activity (cmd.exe with named pipe) was detected in the Security log.
+
 
 **Question 3: What is the name of the suspicious service created?**  
 Using DeepBlueCLI on the System.evtx log, detected the suspicious service named **`UpdateOrchestrator`**.
@@ -41,12 +43,14 @@ Using DeepBlueCLI on the System.evtx log, detected the suspicious service named 
 
 DeepBlueCLI output showing suspicious command-line activity from the Security.evtx log. It highlights multiple PSAttack-style commands, including the creation of a named pipe (rztbzn) commonly associated with Meterpreter.
 
+
 **Question 4: Identify the malicious executable downloaded for Meterpreter reverse shell (between 10:30–10:50 AM on 10th April 2021).**  
 The malicious executable identified was **`ServiceUpdate.exe`**.
 
 ![Malicious Executable - ServiceUpdate.exe](q4-serviceupdate-exe.png)
 
 Event Viewer (Event ID 4688) showing the process creation of the malicious executable ServiceUpdate.exe downloaded by user "Mike Smith". This was the payload used for the Meterpreter reverse shell.
+
 
 **Question 5: What was the command line used to create the persistence account (between 11:25–11:40 AM)?**  
 The command line used was:  
@@ -56,6 +60,7 @@ The command line used was:
 
 Event Viewer showing Event ID 4688 with the command net user ServiceAct /add, which was used to create the persistence user account "ServiceAct".
 
+
 **Question 6: What two local groups was this new account added to?**  
 The newly created account was added to:
 - **Administrators**
@@ -64,7 +69,6 @@ The newly created account was added to:
 ![Local Group Additions](q6-group-additions-1.png)
 
 Event Viewer displaying another Event ID 4688 where the command net localgroup administrators ServiceAct /add was executed, adding the newly created account to the Administrators group.
-
 
 ![Local Group Additions](q6-group-additions-2.png)
 
