@@ -18,12 +18,12 @@ Performed a structured investigation of Windows Security and System event logs t
 ### Investigation Process & Findings
 
 **Question 1: Which user account ran GoogleUpdate.exe?**  
-Filtered the Security log for Event ID 4688 (Process Creation) and searched for "GoogleUpdate.exe".  
-The process was executed under the **NT AUTHORITY\SYSTEM** account.
+I analyzed the Security.evtx log using **DeepBlueCLI** by running the following command:
 
-![Process Creation Events (Event ID 4688)](event-viewer-security.png)  
+ on powershell:
+```.\DeepBlue.ps1 ..\Security.evtx```
+
 ![GoogleUpdate.exe Process Creation Event](q1-googleupdate-event.png)  
-![Subject Field Showing NT AUTHORITY\SYSTEM](q1-subject-user.png)
 
 **Question 2: At what time is there likely evidence of Meterpreter activity?**  
 Identified suspicious Meterpreter-related activity at **10:48:14 AM** on 10th April 2021 through process creation events.
